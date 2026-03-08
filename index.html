@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel Point</title>
+  <title>Solar Panel Tilt & Direction Calculator</title>
 
   <style>
     body {
@@ -68,6 +68,16 @@
       background: #374151;
     }
 
+    .helper {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
     .result {
       margin-top: 22px;
       padding: 16px;
@@ -92,7 +102,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Solar Panel Direction Tool</h1>
+    <h1>Solar Panel Tilt & Direction Calculator</h1>
 
     <p>Enter latitude and longitude, or use your current location.</p>
 
@@ -109,7 +119,10 @@
       step="0.1"
       placeholder="Longitude (Example: -104.9)"
     />
-    Longitude (West = negative, Example: -104.9)
+
+    <div class="helper">
+      Longitude west of Greenwich is negative. Example: Colorado is about -104.9
+    </div>
 
     <button onclick="calculateTilt()">Calculate</button>
     <button class="secondary" onclick="useMyLocation()">Use My Location</button>
@@ -122,6 +135,35 @@
   </div>
 
   <script>
+    function normalizeDegrees(deg) {
+      return ((deg % 360) + 360) % 360;
+    }
+
+    function calculateSunPath(lat) {
+      const northernHemisphere = lat >= 0;
+
+      let sunriseAzimuth;
+      let solarNoonAzimuth;
+      let sunsetAzimuth;
+
+      if (northernHemisphere) {
+        // Simple useful approximation for a general solar-planning tool
+        sunriseAzimuth = 90;
+        solarNoonAzimuth = 180;
+        sunsetAzimuth = 270;
+      } else {
+        sunriseAzimuth = 90;
+        solarNoonAzimuth = 0;
+        sunsetAzimuth = 270;
+      }
+
+      return {
+        sunrise: normalizeDegrees(sunriseAzimuth),
+        noon: normalizeDegrees(solarNoonAzimuth),
+        sunset: normalizeDegrees(sunsetAzimuth)
+      };
+    }
+
     function calculateTilt() {
       const latInput = document.getElementById("latitude").value;
       const lonInput = document.getElementById("longitude").value;
@@ -138,22 +180,29 @@
       }
 
       const yearTilt = Math.round(lat * 0.76 + 3.1);
-const summerTilt = Math.round(lat * 0.9 - 23.5);
-const winterTilt = Math.round(lat * 0.9 + 29);
+      const summerTilt = Math.round(lat * 0.9 - 23.5);
+      const winterTilt = Math.round(lat * 0.9 + 29);
+
       const azimuth = lat >= 0 ? 180 : 0;
-const directionText = lat >= 0 ? "true south" : "true north";
+      const directionText = lat >= 0 ? "true south" : "true north";
+
+      const sunPath = calculateSunPath(lat);
 
       resultBox.style.display = "block";
       resultBox.innerHTML =
-       resultBox.innerHTML =
-  resultBox.innerHTML =
-  "<strong>Year-Round Tilt: " + yearTilt + "°</strong>" +
-"<div><b>Summer Tilt:</b> " + summerTilt + "°</div>" +
-"<div><b>Winter Tilt:</b> " + winterTilt + "°</div>"
-  "<div><b>Latitude:</b> " + lat + "°</div>" +
-  "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
-  "<div><b>Panel Direction:</b> " + directionText + " (" + azimuth + "°)</div>" +
-  "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>";
+        "<strong>Year-Round Tilt: " + yearTilt + "°</strong>" +
+        "<div><b>Summer Tilt:</b> " + summerTilt + "°</div>" +
+        "<div><b>Winter Tilt:</b> " + winterTilt + "°</div>" +
+        "<br>" +
+        "<div><b>Latitude:</b> " + lat + "°</div>" +
+        "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
+        "<div><b>Panel Direction:</b> " + directionText + " (" + azimuth + "°)</div>" +
+        "<br>" +
+        "<div><b>Sunrise Direction:</b> " + sunPath.sunrise + "°</div>" +
+        "<div><b>Solar Noon Direction:</b> " + sunPath.noon + "°</div>" +
+        "<div><b>Sunset Direction:</b> " + sunPath.sunset + "°</div>" +
+        "<br>" +
+        "<div><b>Tip:</b> Adjust tilt seasonally for maximum efficiency.</div>";
     }
 
     function useMyLocation() {
@@ -169,7 +218,7 @@ const directionText = lat >= 0 ? "true south" : "true north";
       resultBox.innerHTML = "<strong>Getting your location...</strong>";
 
       navigator.geolocation.getCurrentPosition(
-        function (position) {
+        function(position) {
           const lat = position.coords.latitude.toFixed(3);
           const lon = position.coords.longitude.toFixed(3);
 
@@ -178,7 +227,7 @@ const directionText = lat >= 0 ? "true south" : "true north";
 
           calculateTilt();
         },
-        function () {
+        function() {
           resultBox.innerHTML =
             "<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
         }
