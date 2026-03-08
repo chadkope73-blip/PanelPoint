@@ -1,92 +1,181 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Point</title>
 
-<title>Panel Pointer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 24px;
+      text-align: center;
+    }
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    .container {
+      background: white;
+      max-width: 520px;
+      margin: 40px auto;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
 
-<style>
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
 
-body{
-font-family: Arial;
-background:#f2f2f2;
-text-align:center;
-padding:40px;
-}
+    p {
+      color: #444;
+      line-height: 1.5;
+    }
 
-.container{
-background:white;
-padding:30px;
-max-width:500px;
-margin:auto;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
+    input,
+    button {
+      width: 100%;
+      max-width: 320px;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 12px;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
 
-input{
-padding:12px;
-width:80%;
-margin:10px;
-font-size:16px;
-}
+    input {
+      border: 1px solid #ccc;
+    }
 
-button{
-padding:12px 20px;
-font-size:16px;
-background:#2f7d32;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
+    button {
+      border: none;
+      background: #2f7d32;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-button:hover{
-background:#256628;
-}
+    button:hover {
+      background: #256628;
+    }
 
-.result{
-margin-top:20px;
-font-size:20px;
-font-weight:bold;
-}
+    .secondary {
+      background: #4b5563;
+    }
 
-</style>
+    .secondary:hover {
+      background: #374151;
+    }
 
+    .result {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 10px;
+      background: #f7faf7;
+      text-align: left;
+      display: none;
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .note {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <h1>Solar Panel Direction Tool</h1>
 
-<div class="container">
+    <p>Enter latitude and longitude, or use your current location.</p>
 
-<h2>Solar Panel Direction Tool</h2>
+    <input
+      id="latitude"
+      type="number"
+      step="0.1"
+      placeholder="Latitude (Example: 39.7)"
+    />
 
-<p>Enter your latitude to estimate the ideal solar panel tilt.</p>
+    <input
+      id="longitude"
+      type="number"
+      step="0.1"
+      placeholder="Longitude (Example: -104.9)"
+    />
 
-<input id="latitude" placeholder="Example: 39.7">
+    <button onclick="calculateTilt()">Calculate</button>
+    <button class="secondary" onclick="useMyLocation()">Use My Location</button>
 
-<br>
+    <div id="result" class="result"></div>
 
-<button onclick="calculateTilt()">Calculate</button>
+    <div class="note">
+      Location is optional and never stored.
+    </div>
+  </div>
 
-<div class="result" id="result"></div>
+  <script>
+    function calculateTilt() {
+      const latInput = document.getElementById("latitude").value;
+      const lonInput = document.getElementById("longitude").value;
 
-</div>
+      const lat = parseFloat(latInput);
+      const lon = parseFloat(lonInput);
 
-<script>
+      const resultBox = document.getElementById("result");
 
-function calculateTilt(){
+      if (isNaN(lat)) {
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "<strong>Please enter a valid latitude.</strong>";
+        return;
+      }
 
-let lat = document.getElementById("latitude").value;
+      const tilt = Math.round(lat * 0.76 + 3.1);
+      const direction = lat >= 0 ? "true south (180°)" : "true north (0°)";
 
-let tilt = Math.round(lat * 0.76 + 3.1);
+      resultBox.style.display = "block";
+      resultBox.innerHTML =
+        "<strong>Recommended Panel Tilt: " + tilt + "°</strong>" +
+        "<div><b>Latitude:</b> " + lat + "°</div>" +
+        "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
+        "<div><b>Suggested Direction:</b> Face panels " + direction + "</div>" +
+        "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>";
+    }
 
-document.getElementById("result").innerHTML =
-"Recommended Panel Tilt: " + tilt + "°";
+    function useMyLocation() {
+      const resultBox = document.getElementById("result");
 
-}
+      if (!navigator.geolocation) {
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "<strong>Geolocation is not supported.</strong>";
+        return;
+      }
 
-</script>
+      resultBox.style.display = "block";
+      resultBox.innerHTML = "<strong>Getting your location...</strong>";
 
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const lat = position.coords.latitude.toFixed(3);
+          const lon = position.coords.longitude.toFixed(3);
+
+          document.getElementById("latitude").value = lat;
+          document.getElementById("longitude").value = lon;
+
+          calculateTilt();
+        },
+        function () {
+          resultBox.innerHTML =
+            "<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
+        }
+      );
+    }
+  </script>
 </body>
+</html>
