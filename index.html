@@ -137,19 +137,23 @@
         return;
       }
 
-      const tilt = Math.round(lat * 0.76 + 3.1);
+      const yearTilt = Math.round(lat * 0.76 + 3.1);
+const summerTilt = Math.round(lat * 0.9 - 23.5);
+const winterTilt = Math.round(lat * 0.9 + 29);
       const azimuth = lat >= 0 ? 180 : 0;
 const directionText = lat >= 0 ? "true south" : "true north";
 
       resultBox.style.display = "block";
       resultBox.innerHTML =
        resultBox.innerHTML =
-  "<strong>Recommended Panel Tilt: " + tilt + "°</strong>" +
+  resultBox.innerHTML =
+  "<strong>Year-Round Tilt: " + yearTilt + "°</strong>" +
+"<div><b>Summer Tilt:</b> " + summerTilt + "°</div>" +
+"<div><b>Winter Tilt:</b> " + winterTilt + "°</div>"
   "<div><b>Latitude:</b> " + lat + "°</div>" +
   "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
-  "<div><b>Suggested Direction:</b> Face panels " + directionText + "</div>" +
-  "<div><b>Azimuth:</b> " + azimuth + "°</div>" +
-  "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>"; 
+  "<div><b>Panel Direction:</b> " + directionText + " (" + azimuth + "°)</div>" +
+  "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>";
     }
 
     function useMyLocation() {
