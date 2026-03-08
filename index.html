@@ -109,6 +109,7 @@
       step="0.1"
       placeholder="Longitude (Example: -104.9)"
     />
+    Longitude (West = negative, Example: -104.9)
 
     <button onclick="calculateTilt()">Calculate</button>
     <button class="secondary" onclick="useMyLocation()">Use My Location</button>
@@ -137,15 +138,18 @@
       }
 
       const tilt = Math.round(lat * 0.76 + 3.1);
-      const direction = lat >= 0 ? "true south (180°)" : "true north (0°)";
+      const azimuth = lat >= 0 ? 180 : 0;
+const directionText = lat >= 0 ? "true south" : "true north";
 
       resultBox.style.display = "block";
       resultBox.innerHTML =
-        "<strong>Recommended Panel Tilt: " + tilt + "°</strong>" +
-        "<div><b>Latitude:</b> " + lat + "°</div>" +
-        "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
-        "<div><b>Suggested Direction:</b> Face panels " + direction + "</div>" +
-        "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>";
+       resultBox.innerHTML =
+  "<strong>Recommended Panel Tilt: " + tilt + "°</strong>" +
+  "<div><b>Latitude:</b> " + lat + "°</div>" +
+  "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
+  "<div><b>Suggested Direction:</b> Face panels " + directionText + "</div>" +
+  "<div><b>Azimuth:</b> " + azimuth + "°</div>" +
+  "<div><b>Tip:</b> This is a good fixed year-round starting angle.</div>"; 
     }
 
     function useMyLocation() {
