@@ -1,417 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solar Panel Tilt & Direction Calculator</title>
-  <meta name="description" content="Free solar panel tilt and direction calculator using ZIP code or coordinates.">
-  <meta property="og:title" content="Solar Panel Tilt & Direction Calculator">
-  <meta property="og:description" content="Free tool to calculate optimal solar panel tilt and direction.">
-  <meta property="og:image" content="https://ittworks.com/logo.png">
-  <meta property="og:url" content="https://ittworks.com">
-  <meta property="og:type" content="website">
-  <script defer src="/_vercel/insights/script.js"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f1416;
-      margin: 0;
-      padding: 24px;
-      text-align: center;
-      color: #e8e0c9;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .container {
-      background: #1b2224;
-      max-width: 560px;
-      margin: 40px auto;
-      padding: 28px;
-      border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      text-align: center;
-    }
+<title>Solar Panel Tilt & Direction Calculator</title>
 
-    .brand-logo {
-      display: block;
-      margin: 0 auto 20px auto;
-      max-width: 200px;
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
+<meta name="description" content="Calculate optimal solar panel tilt and direction based on latitude.">
 
-    h1 {
-      margin-top: 0;
-      font-size: 28px;
-      color: #c8a46b;
-    }
+<script defer src="/_vercel/insights/script.js"></script>
 
-    p {
-      color: #cfc6ad;
-      line-height: 1.5;
-    }
+<style>
 
-    input,
-    button {
-      width: 100%;
-      max-width: 340px;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 12px;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
+body{
+font-family:Arial, sans-serif;
+background:#0f1416;
+color:#e8e0c9;
+text-align:center;
+margin:0;
+padding:20px;
+}
 
-    input {
-      border: 1px solid #4f5a5e;
-      background: #0f1416;
-      color: #e8e0c9;
-    }
+.container{
+max-width:520px;
+margin:auto;
+background:#1b2224;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,.4);
+}
 
-    input::placeholder {
-      color: #9f9884;
-    }
+.logo{
+max-width:180px;
+margin-bottom:20px;
+}
 
-    button {
-      border: none;
-      background: #c8a46b;
-      color: #0f1416;
-      cursor: pointer;
-      font-weight: bold;
-    }
+h1{
+color:#c8a46b;
+}
 
-    button:hover {
-      background: #d9b983;
-    }
+input,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
 
-    .secondary {
-      background: #2e5e5b;
-      color: #e8e0c9;
-    }
+input{
+background:#101719;
+color:#e8e0c9;
+border:1px solid #4f5a5e;
+}
 
-    .secondary:hover {
-      background: #3d7a76;
-    }
+button{
+background:#c8a46b;
+color:#000;
+font-weight:bold;
+cursor:pointer;
+}
 
-    .helper {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #afa890;
-      max-width: 340px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-      line-height: 1.4;
-    }
+button:hover{
+background:#d9b983;
+}
 
-    .result {
-      margin-top: 22px;
-      padding: 16px;
-      border-radius: 10px;
-      background: #0f1416;
-      border: 1px solid #4f5a5e;
-      text-align: left;
-      display: none;
-      line-height: 1.55;
-    }
+.result{
+margin-top:20px;
+padding:15px;
+background:#101719;
+border-radius:8px;
+border:1px solid #4f5a5e;
+display:none;
+text-align:left;
+}
 
-    .result strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #c8a46b;
-    }
+.tools{
+margin-top:35px;
+}
 
-    .note {
-      margin-top: 18px;
-      font-size: 14px;
-      color: #9f9884;
-    }
+.tool-btn{
+display:block;
+margin:8px auto;
+padding:10px;
+background:#101719;
+border:1px solid #4f5a5e;
+border-radius:8px;
+color:#e8e0c9;
+text-decoration:none;
+font-weight:bold;
+}
 
-    .disclaimer {
-      margin-top: 18px;
-      padding: 12px;
-      background: #1b2224;
-      border: 1px solid #4f5a5e;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #cfc6ad;
-      text-align: left;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.5;
-    }
-  </style>
+.tool-btn:hover{
+background:#1e2a30;
+}
+
+.donate{
+margin-top:25px;
+}
+
+.donate-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:10px 16px;
+border:1px solid #c8a46b;
+border-radius:8px;
+background:#0e1a22;
+color:#c8a46b;
+text-decoration:none;
+font-weight:bold;
+}
+
+.donate-btn img{
+width:24px;
+}
+
+.footer{
+margin-top:25px;
+font-size:14px;
+}
+
+.footer a{
+color:#c8a46b;
+text-decoration:none;
+}
+
+.footer a:hover{
+text-decoration:underline;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="container">
-    <img src="logo.png" alt="In Tandem Toolworks Logo" class="brand-logo" />
 
-    <h1>Solar Panel Tilt & Direction Calculator</h1>
+<div class="container">
 
-    <p>
-      Enter a ZIP code, latitude and longitude, or use your current location.
-    </p>
+<img src="logo.png" class="logo">
 
-    <input
-      id="zipcode"
-      type="text"
-      inputmode="numeric"
-      maxlength="5"
-      placeholder="ZIP Code (Example: 80205)"
-    />
+<h1>Solar Panel Tilt & Direction Calculator</h1>
 
-    <button class="secondary" onclick="useZipCode()">Use ZIP Code</button>
+<input id="lat" placeholder="Latitude (Example: 39.7)">
 
-    <input
-      id="latitude"
-      type="number"
-      step="0.1"
-      placeholder="Latitude (Example: 39.7)"
-    />
+<button onclick="calc()">Calculate</button>
 
-    <input
-      id="longitude"
-      type="number"
-      step="0.1"
-      placeholder="Longitude (Example: -104.9)"
-    />
+<div id="result" class="result"></div>
 
-    <div class="helper">
-      Longitude west of Greenwich is negative. Example: Colorado is about -104.9
-    </div>
+<div class="tools">
 
-    <button onclick="calculateTilt()">Calculate</button>
-    <button class="secondary" onclick="useMyLocation()">Use My Location</button>
+<h3>More Solar Tools</h3>
 
-    <div id="result" class="result"></div>
-
-    <div class="note">
-      Location is optional and never stored.
-    </div>
-
-    <div class="disclaimer">
-      Estimates are for general planning only. Roof pitch, shading, weather, hardware, local codes, and site conditions may affect final solar panel placement and performance.
-    </div>
-  </div>
-
-  <script>
-    const zipDatabase = {
-      "80205": { lat: 39.760, lon: -104.970, label: "Denver, CO" },
-      "80014": { lat: 39.665, lon: -104.835, label: "Aurora, CO" },
-      "80903": { lat: 38.833, lon: -104.821, label: "Colorado Springs, CO" },
-      "80302": { lat: 40.017, lon: -105.279, label: "Boulder, CO" },
-      "81611": { lat: 39.191, lon: -106.817, label: "Aspen, CO" },
-      "80435": { lat: 39.481, lon: -106.038, label: "Dillon, CO" },
-      "80524": { lat: 40.602, lon: -105.075, label: "Fort Collins, CO" },
-      "84060": { lat: 40.646, lon: -111.498, label: "Park City, UT" },
-      "87501": { lat: 35.687, lon: -105.938, label: "Santa Fe, NM" },
-      "59715": { lat: 45.679, lon: -111.038, label: "Bozeman, MT" }
-    };
-
-    function normalizeDegrees(deg) {
-      return ((deg % 360) + 360) % 360;
-    }
-
-    function calculateSunPath(lat) {
-      const northernHemisphere = lat >= 0;
-
-      let sunriseAzimuth;
-      let solarNoonAzimuth;
-      let sunsetAzimuth;
-
-      if (northernHemisphere) {
-        sunriseAzimuth = 90;
-        solarNoonAzimuth = 180;
-        sunsetAzimuth = 270;
-      } else {
-        sunriseAzimuth = 90;
-        solarNoonAzimuth = 0;
-        sunsetAzimuth = 270;
-      }
-
-      return {
-        sunrise: normalizeDegrees(sunriseAzimuth),
-        noon: normalizeDegrees(solarNoonAzimuth),
-        sunset: normalizeDegrees(sunsetAzimuth)
-      };
-    }
-
-    function useZipCode() {
-      const zip = document.getElementById("zipcode").value.trim();
-      const resultBox = document.getElementById("result");
-
-      if (!zip) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = "<strong>Please enter a ZIP code.</strong>";
-        return;
-      }
-
-      if (!zipDatabase[zip]) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML =
-          "<strong>ZIP code not found in this starter version.</strong>" +
-          "<div>Please enter latitude and longitude manually.</div>";
-        return;
-      }
-
-      const location = zipDatabase[zip];
-      document.getElementById("latitude").value = location.lat;
-      document.getElementById("longitude").value = location.lon;
-
-      calculateTilt(location.label);
-    }
-
-    function calculateTilt(zipLabel = "") {
-      const latInput = document.getElementById("latitude").value;
-      const lonInput = document.getElementById("longitude").value;
-      const zipInput = document.getElementById("zipcode").value.trim();
-
-      const lat = parseFloat(latInput);
-      const lon = parseFloat(lonInput);
-
-      const resultBox = document.getElementById("result");
-
-      if (isNaN(lat)) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = "<strong>Please enter a valid latitude.</strong>";
-        return;
-      }
-
-      const yearTilt = Math.round(lat * 0.76 + 3.1);
-      const summerTilt = Math.round(lat * 0.9 - 23.5);
-      const winterTilt = Math.round(lat * 0.9 + 29);
-
-      const azimuth = lat >= 0 ? 180 : 0;
-      const directionText = lat >= 0 ? "true south" : "true north";
-
-      const sunPath = calculateSunPath(lat);
-
-      let locationLine = "";
-      if (zipLabel) {
-        locationLine = "<div><b>ZIP Match:</b> " + zipLabel + "</div>";
-      } else if (zipInput) {
-        locationLine = "<div><b>ZIP Entered:</b> " + zipInput + "</div>";
-      }
-
-      resultBox.style.display = "block";
-      resultBox.innerHTML =
-        "<strong>Best Fixed Tilt: " + yearTilt + "°</strong>" +
-        "<div><b>Best Summer Tilt:</b> " + summerTilt + "°</div>" +
-        "<div><b>Best Winter Tilt:</b> " + winterTilt + "°</div>" +
-        "<br>" +
-        locationLine +
-        "<div><b>Latitude:</b> " + lat + "°</div>" +
-        "<div><b>Longitude:</b> " + (isNaN(lon) ? "not provided" : lon + "°") + "</div>" +
-        "<div><b>Best Fixed Panel Direction:</b> " + directionText + " (" + azimuth + "°)</div>" +
-        "<br>" +
-        "<div><b>Sunrise Direction:</b> " + sunPath.sunrise + "°</div>" +
-        "<div><b>Solar Noon Direction:</b> " + sunPath.noon + "°</div>" +
-        "<div><b>Sunset Direction:</b> " + sunPath.sunset + "°</div>" +
-        "<br>" +
-        "<div><b>Tip:</b> Adjust tilt seasonally for maximum efficiency.</div>";
-    }
-
-    function useMyLocation() {
-      const resultBox = document.getElementById("result");
-
-      if (!navigator.geolocation) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = "<strong>Geolocation is not supported.</strong>";
-        return;
-      }
-
-      resultBox.style.display = "block";
-      resultBox.innerHTML = "<strong>Getting your location...</strong>";
-
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          const lat = position.coords.latitude.toFixed(3);
-          const lon = position.coords.longitude.toFixed(3);
-
-          document.getElementById("latitude").value = lat;
-          document.getElementById("longitude").value = lon;
-
-          calculateTilt();
-        },
-        function() {
-          resultBox.innerHTML =
-            "<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
-        }
-      );
-    }
-  </script>
-  <hr style="margin-top:40px; opacity:0.25;">
-
-<h3 style="color:#c8a46b; margin-top:30px;">More Solar Tools</h3>
-
-<div style="margin-top:15px;">
-
-<a href="https://ittworks.com"
-style="
-display:inline-block;
-margin:6px;
-padding:10px 16px;
-background:#1b2224;
-border:1px solid #4f5a5e;
-border-radius:8px;
-color:#e8e0c9;
-text-decoration:none;
-font-weight:600;">
-Solar Panel Tilt & Direction Calculator
-</a>
-
-<a href="https://production.ittworks.com"
-style="
-display:inline-block;
-margin:6px;
-padding:10px 16px;
-background:#1b2224;
-border:1px solid #4f5a5e;
-border-radius:8px;
-color:#e8e0c9;
-text-decoration:none;
-font-weight:600;">
+<a class="tool-btn" href="https://production.ittworks.com">
 Solar Production Calculator
 </a>
 
-<a href="https://offgrid.ittworks.com"
-style="
-display:inline-block;
-margin:6px;
-padding:10px 16px;
-background:#1b2224;
-border:1px solid #4f5a5e;
-border-radius:8px;
-color:#e8e0c9;
-text-decoration:none;
-font-weight:600;">
+<a class="tool-btn" href="https://offgrid.ittworks.com">
 Off-Grid Solar System Size Calculator
 </a>
 
 </div>
 
+<div class="donate">
 
- <div style="margin-top:35px; font-size:14px; color:#9f9884; text-align:center;">
+<p>Enjoying the tools? Support development.</p>
 
-Built by <strong>In Tandem Toolworks</strong>
+<a class="donate-btn" href="https://donate.stripe.com/4gM3cv0kV4UJbzPfeDeAg00" target="_blank">
+
+<img src="ittw-donate.png">
+
+Support InTandem Toolworks
+
+</a>
+
+<p style="font-size:13px;opacity:.7;">Thank you for the donation.</p>
+
+</div>
+
+<div class="footer">
+
+Built by <b>In Tandem Toolworks</b>
 
 <br><br>
 
-<a href="mailto:support@ittworks.com?subject=Solar Tool Feedback"
-style="color:#c8a46b; text-decoration:none;"> support@ittworks.com
+<a href="mailto:support@ittworks.com">
+support@ittworks.com
 </a>
 
 <br><br>
 
-<a href="https://www.facebook.com/InTandemToolworks"
-target="_blank"
-style="color:#c8a46b; text-decoration:none;">
+<a href="https://www.facebook.com/InTandemToolworks" target="_blank">
 Follow us on Facebook
 </a>
 
-</div> 
+</div>
+
+</div>
+
+<script>
+
+function calc(){
+
+let lat=parseFloat(document.getElementById("lat").value);
+
+if(isNaN(lat)) return;
+
+let tilt=Math.round(Math.abs(lat)*0.76+3);
+
+let dir=(lat>=0)?"South (180°)":"North (0°)";
+
+let result=document.getElementById("result");
+
+result.style.display="block";
+
+result.innerHTML=
+"<b>Recommended Tilt:</b> "+tilt+"°<br><br>"+
+"<b>Panel Direction:</b> "+dir;
+
+}
+
+</script>
+
 </body>
 </html>
