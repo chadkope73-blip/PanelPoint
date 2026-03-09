@@ -7,7 +7,7 @@
 
 <title>Solar Panel Tilt & Direction Calculator</title>
 
-<meta name="description" content="Calculate optimal solar panel tilt and direction based on latitude.">
+<meta name="description" content="Calculate optimal solar panel tilt and direction based on latitude or your current GPS location.">
 
 <script defer src="/_vercel/insights/script.js"></script>
 
@@ -38,6 +38,13 @@ margin-bottom:20px;
 
 h1{
 color:#c8a46b;
+margin-bottom:10px;
+}
+
+p{
+color:#cfc6ad;
+line-height:1.5;
+margin-bottom:20px;
 }
 
 input,button{
@@ -47,6 +54,7 @@ margin-top:10px;
 border-radius:8px;
 border:none;
 font-size:16px;
+box-sizing:border-box;
 }
 
 input{
@@ -66,6 +74,23 @@ button:hover{
 background:#d9b983;
 }
 
+.secondary{
+background:#2e5e5b;
+color:#e8e0c9;
+}
+
+.secondary:hover{
+background:#3d7a76;
+}
+
+.helper{
+margin-top:8px;
+font-size:14px;
+color:#afa890;
+text-align:left;
+line-height:1.4;
+}
+
 .result{
 margin-top:20px;
 padding:15px;
@@ -74,6 +99,14 @@ border-radius:8px;
 border:1px solid #4f5a5e;
 display:none;
 text-align:left;
+line-height:1.6;
+}
+
+.result strong{
+display:block;
+margin-bottom:8px;
+font-size:18px;
+color:#c8a46b;
 }
 
 .tools{
@@ -115,6 +148,7 @@ font-weight:bold;
 
 .donate-btn img{
 width:24px;
+height:24px;
 }
 
 .footer{
@@ -139,13 +173,24 @@ text-decoration:underline;
 
 <div class="container">
 
-<img src="logo.png" class="logo">
+<img src="logo.png" class="logo" alt="In Tandem Toolworks logo">
 
 <h1>Solar Panel Tilt & Direction Calculator</h1>
 
+<p>
+Estimate a strong starting point for solar panel tilt and direction using latitude or your current GPS location.
+</p>
+
 <input id="lat" placeholder="Latitude (Example: 39.7)">
+<input id="lon" placeholder="Longitude Optional (Example: -104.9)">
+
+<div class="helper">
+Longitude is optional. West of Greenwich is negative. Example: Colorado is about -104.9
+</div>
 
 <button onclick="calc()">Calculate</button>
+
+<button class="secondary" onclick="useMyLocation()">Use My Location</button>
 
 <div id="result" class="result"></div>
 
@@ -169,7 +214,7 @@ Off-Grid Solar System Size Calculator
 
 <a class="donate-btn" href="https://donate.stripe.com/4gM3cv0kV4UJbzPfeDeAg00" target="_blank">
 
-<img src="ittw-donate.png">
+<img src="ittw-donate.png" alt="Donation icon">
 
 Support InTandem Toolworks
 
@@ -204,20 +249,71 @@ Follow us on Facebook
 function calc(){
 
 let lat=parseFloat(document.getElementById("lat").value);
-
-if(isNaN(lat)) return;
-
-let tilt=Math.round(Math.abs(lat)*0.76+3);
-
-let dir=(lat>=0)?"South (180°)":"North (0°)";
+let lon=parseFloat(document.getElementById("lon").value);
 
 let result=document.getElementById("result");
 
+if(isNaN(lat)){
 result.style.display="block";
+result.innerHTML="<strong>Please enter a valid latitude.</strong>";
+return;
+}
 
+let fixedTilt=Math.round(Math.abs(lat)*0.76+3.1);
+let summerTilt=Math.round(Math.abs(lat)*0.9-23.5);
+let winterTilt=Math.round(Math.abs(lat)*0.9+29);
+
+if(summerTilt < 0){
+summerTilt = 0;
+}
+
+let azimuth=(lat>=0)?180:0;
+let direction=(lat>=0)?"True South":"True North";
+
+result.style.display="block";
 result.innerHTML=
-"<b>Recommended Tilt:</b> "+tilt+"°<br><br>"+
-"<b>Panel Direction:</b> "+dir;
+"<strong>Recommended Fixed Tilt: "+fixedTilt+"°</strong>"+
+"<div><b>Recommended Summer Tilt:</b> "+summerTilt+"°</div>"+
+"<div><b>Recommended Winter Tilt:</b> "+winterTilt+"°</div>"+
+"<br>"+
+"<div><b>Suggested Panel Direction:</b> "+direction+" ("+azimuth+"°)</div>"+
+"<div><b>Latitude:</b> "+lat+"°</div>"+
+"<div><b>Longitude:</b> "+(isNaN(lon) ? "Not provided" : lon+"°")+"</div>"+
+"<br>"+
+"<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
+
+}
+
+function useMyLocation(){
+
+let result=document.getElementById("result");
+
+if(!navigator.geolocation){
+result.style.display="block";
+result.innerHTML="<strong>Geolocation is not supported on this device.</strong>";
+return;
+}
+
+result.style.display="block";
+result.innerHTML="<strong>Getting your location...</strong>";
+
+navigator.geolocation.getCurrentPosition(
+
+function(position){
+let lat=position.coords.latitude.toFixed(3);
+let lon=position.coords.longitude.toFixed(3);
+
+document.getElementById("lat").value=lat;
+document.getElementById("lon").value=lon;
+
+calc();
+},
+
+function(){
+result.innerHTML="<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
+}
+
+);
 
 }
 
