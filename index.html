@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Solar Panel Tilt & Direction Calculator</title>
+<title>Solar Panel Tilt, Direction & True North Calculator</title>
 
 <meta name="description" content="Free solar panel tilt and direction calculator using Colorado ZIP code, coordinates, or GPS location.">
 <meta name="theme-color" content="#0f1416">
@@ -87,31 +87,6 @@ color:#e8e0c9;
 background:#3d7a76;
 }
 
-.helper{
-margin-top:8px;
-font-size:14px;
-color:#afa890;
-text-align:left;
-line-height:1.4;
-}
-
-.status{
-margin-top:10px;
-font-size:13px;
-color:#afa890;
-}
-
-.offline-note{
-margin-top:10px;
-padding:10px;
-background:#101719;
-border:1px solid #4f5a5e;
-border-radius:8px;
-font-size:13px;
-color:#cfc6ad;
-display:none;
-}
-
 .result{
 margin-top:20px;
 padding:15px;
@@ -123,10 +98,9 @@ text-align:left;
 line-height:1.6;
 }
 
-.result strong{
-display:block;
-margin-bottom:8px;
-font-size:18px;
+.compass{
+margin-top:15px;
+font-size:16px;
 color:#c8a46b;
 }
 
@@ -144,10 +118,6 @@ border-radius:8px;
 color:#e8e0c9;
 text-decoration:none;
 font-weight:bold;
-}
-
-.tool-btn:hover{
-background:#1e2a30;
 }
 
 .donate{
@@ -182,10 +152,6 @@ color:#c8a46b;
 text-decoration:none;
 }
 
-.footer a:hover{
-text-decoration:underline;
-}
-
 </style>
 
 </head>
@@ -199,33 +165,17 @@ text-decoration:underline;
 <h1>Solar Panel Tilt & Direction Calculator</h1>
 
 <p>
-Estimate a strong starting point for solar panel tilt and direction using Colorado ZIP code, latitude and longitude, or your current GPS location.
+Estimate solar panel tilt and alignment using GPS or coordinates.
 </p>
-
-<div id="connectionStatus" class="status">Checking connection…</div>
-
-<div id="offlineNote" class="offline-note">
-Calculator features work offline after the page loads once. Donation and Facebook links require a connection.
-</div>
-
-<div class="helper">
-Tip: For offline use, open once in Safari and add to Home Screen.
-</div>
-
-<input id="zipcode" placeholder="Colorado ZIP Code (Example: 80205)">
-
-<button class="secondary" onclick="useZipCode()">Use ZIP Code</button>
 
 <input id="lat" placeholder="Latitude (Example: 39.7)">
 <input id="lon" placeholder="Longitude Optional (Example: -104.9)">
 
-<div class="helper">
-Longitude is optional. West of Greenwich is negative. Example: Colorado is about -104.9
-</div>
-
 <button onclick="calc()">Calculate</button>
 
 <button class="secondary" onclick="useMyLocation()">Use My Location</button>
+
+<div id="compass" class="compass"></div>
 
 <div id="result" class="result"></div>
 
@@ -254,8 +204,6 @@ Off-Grid Solar System Size Calculator
 Support InTandem Toolworks
 
 </a>
-
-<p style="font-size:13px;opacity:.7;">Thank you for the donation.</p>
 
 </div>
 
@@ -300,12 +248,11 @@ let fixedTilt=Math.round(Math.abs(lat)*0.76+3.1);
 let summerTilt=Math.round(Math.abs(lat)*0.9-23.5);
 let winterTilt=Math.round(Math.abs(lat)*0.9+29);
 
-if(summerTilt < 0){summerTilt = 0;}
-
 let azimuth=(lat>=0)?180:0;
 let direction=(lat>=0)?"True South":"True North";
 
 result.style.display="block";
+
 result.innerHTML=
 "<strong>Recommended Fixed Tilt: "+fixedTilt+"°</strong>"+
 "<div><b>Recommended Summer Tilt:</b> "+summerTilt+"°</div>"+
@@ -316,11 +263,39 @@ result.innerHTML=
 "<div><b>Longitude:</b> "+(isNaN(lon) ? "Not provided" : lon+"°")+"</div>"+
 "<br>"+
 "<div><b>Magnetic Declination:</b> "+magneticDeclination+"° East</div>"+
-"<div><b>Compass Correction:</b> Subtract "+magneticDeclination+"° from compass heading to find True North.</div>"+
-"<br>"+
-"<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
+"<div><b>Compass Correction:</b> Subtract "+magneticDeclination+"° from compass heading to find True North.</div>";
 
 }
+
+function useMyLocation(){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat=position.coords.latitude;
+let lon=position.coords.longitude;
+
+document.getElementById("lat").value=lat.toFixed(4);
+document.getElementById("lon").value=lon.toFixed(4);
+
+calc();
+
+});
+
+}
+
+window.addEventListener("deviceorientationabsolute",function(event){
+
+let compass=document.getElementById("compass");
+
+if(event.alpha!==null){
+
+let heading=Math.round(event.alpha);
+
+compass.innerHTML="Compass Heading: "+heading+"°";
+
+}
+
+});
 
 </script>
 
