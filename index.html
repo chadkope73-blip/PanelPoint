@@ -8,6 +8,7 @@
 <title>Solar Panel Tilt & Direction Calculator</title>
 
 <meta name="description" content="Free solar panel tilt and direction calculator using ZIP code, coordinates, or GPS location.">
+
 <meta name="theme-color" content="#0f1416">
 
 <link rel="manifest" href="manifest.json">
@@ -205,7 +206,7 @@ Estimate a strong starting point for solar panel tilt and direction using ZIP co
 <div id="connectionStatus" class="status">Checking connection…</div>
 
 <div id="offlineNote" class="offline-note">
-Calculator features work offline after the page has loaded once. Donation and Facebook links require a connection.
+Calculator features work offline after the page loads once. Donation and Facebook links require a connection.
 </div>
 
 <input id="zipcode" placeholder="ZIP Code (Example: 80205)">
@@ -277,157 +278,6 @@ Follow us on Facebook
 
 <script>
 
-const zipDatabase = {
-"80205": { lat: 39.760, lon: -104.970, label: "Denver, CO" },
-"80014": { lat: 39.665, lon: -104.835, label: "Aurora, CO" },
-"80903": { lat: 38.833, lon: -104.821, label: "Colorado Springs, CO" },
-"80302": { lat: 40.017, lon: -105.279, label: "Boulder, CO" },
-"81611": { lat: 39.191, lon: -106.817, label: "Aspen, CO" },
-"80435": { lat: 39.481, lon: -106.038, label: "Dillon, CO" },
-"80524": { lat: 40.602, lon: -105.075, label: "Fort Collins, CO" },
-"84060": { lat: 40.646, lon: -111.498, label: "Park City, UT" },
-"87501": { lat: 35.687, lon: -105.938, label: "Santa Fe, NM" },
-"59715": { lat: 45.679, lon: -111.038, label: "Bozeman, MT" }
-};
-
-function normalizeDegrees(deg){
-return ((deg % 360) + 360) % 360;
-}
-
-function calculateSunPath(lat){
-const northernHemisphere = lat >= 0;
-
-let sunriseAzimuth;
-let solarNoonAzimuth;
-let sunsetAzimuth;
-
-if(northernHemisphere){
-sunriseAzimuth = 90;
-solarNoonAzimuth = 180;
-sunsetAzimuth = 270;
-}else{
-sunriseAzimuth = 90;
-solarNoonAzimuth = 0;
-sunsetAzimuth = 270;
-}
-
-return {
-sunrise: normalizeDegrees(sunriseAzimuth),
-noon: normalizeDegrees(solarNoonAzimuth),
-sunset: normalizeDegrees(sunsetAzimuth)
-};
-}
-
-function useZipCode(){
-
-const zip = document.getElementById("zipcode").value.trim();
-const result = document.getElementById("result");
-
-if(!zip){
-result.style.display="block";
-result.innerHTML="<strong>Please enter a ZIP code.</strong>";
-return;
-}
-
-if(!zipDatabase[zip]){
-result.style.display="block";
-result.innerHTML="<strong>ZIP code not found in this starter version.</strong><div>Please enter latitude and longitude manually.</div>";
-return;
-}
-
-const location = zipDatabase[zip];
-document.getElementById("lat").value = location.lat;
-document.getElementById("lon").value = location.lon;
-
-calc(location.label);
-}
-
-function calc(zipLabel = ""){
-
-let lat=parseFloat(document.getElementById("lat").value);
-let lon=parseFloat(document.getElementById("lon").value);
-let zipInput=document.getElementById("zipcode").value.trim();
-
-let result=document.getElementById("result");
-
-if(isNaN(lat)){
-result.style.display="block";
-result.innerHTML="<strong>Please enter a valid latitude.</strong>";
-return;
-}
-
-let fixedTilt=Math.round(Math.abs(lat)*0.76+3.1);
-let summerTilt=Math.round(Math.abs(lat)*0.9-23.5);
-let winterTilt=Math.round(Math.abs(lat)*0.9+29);
-
-if(summerTilt < 0){
-summerTilt = 0;
-}
-
-let azimuth=(lat>=0)?180:0;
-let direction=(lat>=0)?"True South":"True North";
-
-const sunPath = calculateSunPath(lat);
-
-let locationLine = "";
-if(zipLabel){
-locationLine = "<div><b>ZIP Match:</b> " + zipLabel + "</div>";
-}else if(zipInput){
-locationLine = "<div><b>ZIP Entered:</b> " + zipInput + "</div>";
-}
-
-result.style.display="block";
-result.innerHTML=
-"<strong>Recommended Fixed Tilt: "+fixedTilt+"°</strong>"+
-"<div><b>Recommended Summer Tilt:</b> "+summerTilt+"°</div>"+
-"<div><b>Recommended Winter Tilt:</b> "+winterTilt+"°</div>"+
-"<br>"+
-locationLine+
-"<div><b>Suggested Panel Direction:</b> "+direction+" ("+azimuth+"°)</div>"+
-"<div><b>Latitude:</b> "+lat+"°</div>"+
-"<div><b>Longitude:</b> "+(isNaN(lon) ? "Not provided" : lon+"°")+"</div>"+
-"<br>"+
-"<div><b>Sunrise Direction:</b> "+sunPath.sunrise+"°</div>"+
-"<div><b>Solar Noon Direction:</b> "+sunPath.noon+"°</div>"+
-"<div><b>Sunset Direction:</b> "+sunPath.sunset+"°</div>"+
-"<br>"+
-"<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
-
-}
-
-function useMyLocation(){
-
-let result=document.getElementById("result");
-
-if(!navigator.geolocation){
-result.style.display="block";
-result.innerHTML="<strong>Geolocation is not supported on this device.</strong>";
-return;
-}
-
-result.style.display="block";
-result.innerHTML="<strong>Getting your location...</strong>";
-
-navigator.geolocation.getCurrentPosition(
-
-function(position){
-let lat=position.coords.latitude.toFixed(3);
-let lon=position.coords.longitude.toFixed(3);
-
-document.getElementById("lat").value=lat;
-document.getElementById("lon").value=lon;
-
-calc();
-},
-
-function(){
-result.innerHTML="<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
-}
-
-);
-
-}
-
 function updateConnectionStatus(){
 const status = document.getElementById("connectionStatus");
 const note = document.getElementById("offlineNote");
@@ -445,14 +295,22 @@ window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 updateConnectionStatus();
 
-if("serviceWorker" in navigator){
-window.addEventListener("load", function(){
-navigator.serviceWorker.register("sw.js").catch(function(error){
-console.log("Service worker registration failed:", error);
-});
-});
-}
+</script>
 
+<!-- Service Worker Registration -->
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/sw.js")
+      .then(function () {
+        console.log("Service worker registered");
+      })
+      .catch(function (error) {
+        console.log("Service worker registration failed:", error);
+      });
+  });
+}
 </script>
 
 </body>
