@@ -8,6 +8,10 @@
 <title>Solar Panel Tilt & Direction Calculator</title>
 
 <meta name="description" content="Free solar panel tilt and direction calculator using ZIP code, coordinates, or GPS location.">
+<meta name="theme-color" content="#0f1416">
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.png">
 
 <script defer src="/_vercel/insights/script.js"></script>
 
@@ -89,6 +93,23 @@ font-size:14px;
 color:#afa890;
 text-align:left;
 line-height:1.4;
+}
+
+.status{
+margin-top:10px;
+font-size:13px;
+color:#afa890;
+}
+
+.offline-note{
+margin-top:10px;
+padding:10px;
+background:#101719;
+border:1px solid #4f5a5e;
+border-radius:8px;
+font-size:13px;
+color:#cfc6ad;
+display:none;
 }
 
 .result{
@@ -180,6 +201,12 @@ text-decoration:underline;
 <p>
 Estimate a strong starting point for solar panel tilt and direction using ZIP code, latitude and longitude, or your current GPS location.
 </p>
+
+<div id="connectionStatus" class="status">Checking connection…</div>
+
+<div id="offlineNote" class="offline-note">
+Calculator features work offline after the page has loaded once. Donation and Facebook links require a connection.
+</div>
 
 <input id="zipcode" placeholder="ZIP Code (Example: 80205)">
 
@@ -399,6 +426,31 @@ result.innerHTML="<strong>Location access denied.</strong><div>Please enter coor
 
 );
 
+}
+
+function updateConnectionStatus(){
+const status = document.getElementById("connectionStatus");
+const note = document.getElementById("offlineNote");
+
+if(navigator.onLine){
+status.textContent = "Online";
+note.style.display = "none";
+}else{
+status.textContent = "Offline mode active";
+note.style.display = "block";
+}
+}
+
+window.addEventListener("online", updateConnectionStatus);
+window.addEventListener("offline", updateConnectionStatus);
+updateConnectionStatus();
+
+if("serviceWorker" in navigator){
+window.addEventListener("load", function(){
+navigator.serviceWorker.register("sw.js").catch(function(error){
+console.log("Service worker registration failed:", error);
+});
+});
 }
 
 </script>
