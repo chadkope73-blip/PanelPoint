@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Solar Panel Tilt & Direction Calculator</title>
-<meta name="description" content="Free solar panel tilt and direction calculator using ZIP code, coordinates, or GPS location.">
+
+<meta name="description" content="Free solar panel tilt and direction calculator using Colorado ZIP code, coordinates, or GPS location.">
 <meta name="theme-color" content="#0f1416">
 
 <link rel="manifest" href="manifest.json">
@@ -14,178 +16,182 @@
 <script defer src="/_vercel/insights/script.js"></script>
 
 <style>
+
 body{
-  font-family:Arial, sans-serif;
-  background:#0f1416;
-  color:#e8e0c9;
-  text-align:center;
-  margin:0;
-  padding:20px;
+font-family:Arial, sans-serif;
+background:#0f1416;
+color:#e8e0c9;
+text-align:center;
+margin:0;
+padding:20px;
 }
 
 .container{
-  max-width:520px;
-  margin:auto;
-  background:#1b2224;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,.4);
+max-width:520px;
+margin:auto;
+background:#1b2224;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,.4);
 }
 
 .logo{
-  max-width:180px;
-  margin-bottom:20px;
+max-width:180px;
+margin-bottom:20px;
 }
 
 h1{
-  color:#c8a46b;
-  margin-bottom:10px;
+color:#c8a46b;
+margin-bottom:10px;
 }
 
 p{
-  color:#cfc6ad;
-  line-height:1.5;
-  margin-bottom:20px;
+color:#cfc6ad;
+line-height:1.5;
+margin-bottom:20px;
 }
 
 input,button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
-  font-size:16px;
-  box-sizing:border-box;
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+font-size:16px;
+box-sizing:border-box;
 }
 
 input{
-  background:#101719;
-  color:#e8e0c9;
-  border:1px solid #4f5a5e;
+background:#101719;
+color:#e8e0c9;
+border:1px solid #4f5a5e;
 }
 
 button{
-  background:#c8a46b;
-  color:#000;
-  font-weight:bold;
-  cursor:pointer;
+background:#c8a46b;
+color:#000;
+font-weight:bold;
+cursor:pointer;
 }
 
 button:hover{
-  background:#d9b983;
+background:#d9b983;
 }
 
 .secondary{
-  background:#2e5e5b;
-  color:#e8e0c9;
+background:#2e5e5b;
+color:#e8e0c9;
 }
 
 .secondary:hover{
-  background:#3d7a76;
+background:#3d7a76;
 }
 
 .helper{
-  margin-top:8px;
-  font-size:14px;
-  color:#afa890;
-  text-align:left;
-  line-height:1.4;
+margin-top:8px;
+font-size:14px;
+color:#afa890;
+text-align:left;
+line-height:1.4;
 }
 
 .status{
-  margin-top:10px;
-  font-size:13px;
-  color:#afa890;
+margin-top:10px;
+font-size:13px;
+color:#afa890;
 }
 
 .offline-note{
-  margin-top:10px;
-  padding:10px;
-  background:#101719;
-  border:1px solid #4f5a5e;
-  border-radius:8px;
-  font-size:13px;
-  color:#cfc6ad;
-  display:none;
+margin-top:10px;
+padding:10px;
+background:#101719;
+border:1px solid #4f5a5e;
+border-radius:8px;
+font-size:13px;
+color:#cfc6ad;
+display:none;
 }
 
 .result{
-  margin-top:20px;
-  padding:15px;
-  background:#101719;
-  border-radius:8px;
-  border:1px solid #4f5a5e;
-  display:none;
-  text-align:left;
-  line-height:1.6;
+margin-top:20px;
+padding:15px;
+background:#101719;
+border-radius:8px;
+border:1px solid #4f5a5e;
+display:none;
+text-align:left;
+line-height:1.6;
 }
 
 .result strong{
-  display:block;
-  margin-bottom:8px;
-  font-size:18px;
-  color:#c8a46b;
+display:block;
+margin-bottom:8px;
+font-size:18px;
+color:#c8a46b;
 }
 
 .tools{
-  margin-top:35px;
+margin-top:35px;
 }
 
 .tool-btn{
-  display:block;
-  margin:8px auto;
-  padding:10px;
-  background:#101719;
-  border:1px solid #4f5a5e;
-  border-radius:8px;
-  color:#e8e0c9;
-  text-decoration:none;
-  font-weight:bold;
+display:block;
+margin:8px auto;
+padding:10px;
+background:#101719;
+border:1px solid #4f5a5e;
+border-radius:8px;
+color:#e8e0c9;
+text-decoration:none;
+font-weight:bold;
 }
 
 .tool-btn:hover{
-  background:#1e2a30;
+background:#1e2a30;
 }
 
 .donate{
-  margin-top:25px;
+margin-top:25px;
 }
 
 .donate-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 16px;
-  border:1px solid #c8a46b;
-  border-radius:8px;
-  background:#0e1a22;
-  color:#c8a46b;
-  text-decoration:none;
-  font-weight:bold;
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:10px 16px;
+border:1px solid #c8a46b;
+border-radius:8px;
+background:#0e1a22;
+color:#c8a46b;
+text-decoration:none;
+font-weight:bold;
 }
 
 .donate-btn img{
-  width:24px;
-  height:24px;
+width:24px;
+height:24px;
 }
 
 .footer{
-  margin-top:25px;
-  font-size:14px;
+margin-top:25px;
+font-size:14px;
 }
 
 .footer a{
-  color:#c8a46b;
-  text-decoration:none;
+color:#c8a46b;
+text-decoration:none;
 }
 
 .footer a:hover{
-  text-decoration:underline;
+text-decoration:underline;
 }
+
 </style>
+
 </head>
 
 <body>
+
 <div class="container">
 
 <img src="logo.png" class="logo" alt="In Tandem Toolworks logo">
@@ -193,7 +199,7 @@ button:hover{
 <h1>Solar Panel Tilt &amp; Direction Calculator</h1>
 
 <p>
-Estimate a strong starting point for solar panel tilt and direction using ZIP code, latitude and longitude, or your current GPS location.
+Estimate a strong starting point for solar panel tilt and direction using Colorado ZIP code, latitude and longitude, or your current GPS location.
 </p>
 
 <div id="connectionStatus" class="status">Checking connection…</div>
@@ -202,7 +208,12 @@ Estimate a strong starting point for solar panel tilt and direction using ZIP co
 Calculator features work offline after the page loads once. Donation and Facebook links require a connection.
 </div>
 
-<input id="zipcode" placeholder="ZIP Code (Example: 80205)">
+<div class="helper">
+Tip: For offline use, open once in Safari and add to Home Screen.
+</div>
+
+<input id="zipcode" placeholder="Colorado ZIP Code (Example: 80205)">
+
 <button class="secondary" onclick="useZipCode()">Use ZIP Code</button>
 
 <input id="lat" placeholder="Latitude (Example: 39.7)">
@@ -213,202 +224,262 @@ Longitude is optional. West of Greenwich is negative. Example: Colorado is about
 </div>
 
 <button onclick="calc()">Calculate</button>
+
 <button class="secondary" onclick="useMyLocation()">Use My Location</button>
 
 <div id="result" class="result"></div>
 
 <div class="tools">
-  <h3>More Solar Tools</h3>
 
-  <a class="tool-btn" href="https://production.ittworks.com">
-    Solar Production Calculator
-  </a>
+<h3>More Solar Tools</h3>
 
-  <a class="tool-btn" href="https://offgrid.ittworks.com">
-    Off-Grid Solar System Size Calculator
-  </a>
+<a class="tool-btn" href="https://production.ittworks.com">
+Solar Production Calculator
+</a>
+
+<a class="tool-btn" href="https://offgrid.ittworks.com">
+Off-Grid Solar System Size Calculator
+</a>
+
 </div>
 
 <div class="donate">
-  <p>Enjoying the tools? Support development.</p>
 
-  <a class="donate-btn" href="https://donate.stripe.com/4gM3cv0kV4UJbzPfeDeAg00" target="_blank">
-    <img src="ittw-donate.png" alt="Donation icon">
-    Support InTandem Toolworks
-  </a>
+<p>Enjoying the tools? Support development.</p>
 
-  <p style="font-size:13px;opacity:.7;">Thank you for the donation.</p>
+<a class="donate-btn" href="https://donate.stripe.com/4gM3cv0kV4UJbzPfeDeAg00" target="_blank">
+
+<img src="ittw-donate.png" alt="Donation icon">
+
+Support InTandem Toolworks
+
+</a>
+
+<p style="font-size:13px;opacity:.7;">Thank you for the donation.</p>
+
 </div>
 
 <div class="footer">
-  Built by <b>In Tandem Toolworks</b>
-  <br><br>
-  <a href="mailto:support@ittworks.com">support@ittworks.com</a>
-  <br><br>
-  <a href="https://www.facebook.com/InTandemToolworks" target="_blank">Follow us on Facebook</a>
+
+Built by <b>In Tandem Toolworks</b>
+
+<br><br>
+
+<a href="mailto:support@ittworks.com">
+support@ittworks.com
+</a>
+
+<br><br>
+
+<a href="https://www.facebook.com/InTandemToolworks" target="_blank">
+Follow us on Facebook
+</a>
+
 </div>
 
 </div>
 
 <script>
+
 const zipDatabase = {
-  "80205": { lat: 39.760, lon: -104.970, label: "Denver, CO" },
-  "80014": { lat: 39.665, lon: -104.835, label: "Aurora, CO" },
-  "80903": { lat: 38.833, lon: -104.821, label: "Colorado Springs, CO" },
-  "80302": { lat: 40.017, lon: -105.279, label: "Boulder, CO" },
-  "81611": { lat: 39.191, lon: -106.817, label: "Aspen, CO" },
-  "80435": { lat: 39.481, lon: -106.038, label: "Dillon, CO" },
-  "80524": { lat: 40.602, lon: -105.075, label: "Fort Collins, CO" },
-  "84060": { lat: 40.646, lon: -111.498, label: "Park City, UT" },
-  "87501": { lat: 35.687, lon: -105.938, label: "Santa Fe, NM" },
-  "59715": { lat: 45.679, lon: -111.038, label: "Bozeman, MT" }
+
+  /* Denver Metro */
+  "80014": { lat:39.665, lon:-104.835, label:"Aurora, CO" },
+  "80012": { lat:39.699, lon:-104.839, label:"Aurora Central, CO" },
+  "80020": { lat:39.913, lon:-105.085, label:"Broomfield, CO" },
+  "80112": { lat:39.575, lon:-104.876, label:"Centennial, CO" },
+  "80126": { lat:39.548, lon:-104.969, label:"Highlands Ranch, CO" },
+  "80120": { lat:39.613, lon:-104.995, label:"Littleton, CO" },
+  "80205": { lat:39.760, lon:-104.970, label:"Denver, CO" },
+  "80210": { lat:39.679, lon:-104.963, label:"Denver South, CO" },
+  "80227": { lat:39.667, lon:-105.094, label:"Lakewood, CO" },
+
+  /* Front Range */
+  "80524": { lat:40.602, lon:-105.075, label:"Fort Collins, CO" },
+  "80525": { lat:40.541, lon:-105.056, label:"Fort Collins South, CO" },
+  "80501": { lat:40.167, lon:-105.101, label:"Longmont, CO" },
+  "80302": { lat:40.017, lon:-105.279, label:"Boulder, CO" },
+  "80401": { lat:39.755, lon:-105.221, label:"Golden, CO" },
+  "80831": { lat:38.963, lon:-104.548, label:"Falcon, CO" },
+  "80903": { lat:38.833, lon:-104.821, label:"Colorado Springs, CO" },
+
+  /* Mountain Corridor */
+  "80435": { lat:39.481, lon:-106.038, label:"Dillon, CO" },
+  "80498": { lat:39.520, lon:-106.051, label:"Silverthorne, CO" },
+  "80424": { lat:39.481, lon:-106.046, label:"Breckenridge, CO" },
+  "80487": { lat:40.485, lon:-106.831, label:"Steamboat Springs, CO" },
+
+  /* Western Slope */
+  "81501": { lat:39.063, lon:-108.550, label:"Grand Junction, CO" },
+  "81503": { lat:39.026, lon:-108.560, label:"Grand Junction South, CO" },
+  "81601": { lat:39.550, lon:-107.325, label:"Glenwood Springs, CO" },
+  "81611": { lat:39.191, lon:-106.817, label:"Aspen, CO" },
+  "81401": { lat:38.478, lon:-107.876, label:"Montrose, CO" },
+  "81301": { lat:37.275, lon:-107.880, label:"Durango, CO" },
+
+  /* National Parks & Outdoor Areas */
+  "80517": { lat:40.377, lon:-105.521, label:"Estes Park / RMNP, CO" },
+  "81230": { lat:38.545, lon:-106.926, label:"Crested Butte, CO" },
+  "81632": { lat:39.643, lon:-106.378, label:"Edwards / Vail Valley, CO" },
+  "81657": { lat:39.640, lon:-106.374, label:"Vail, CO" }
+
 };
 
 function normalizeDegrees(deg){
-  return ((deg % 360) + 360) % 360;
+return ((deg % 360) + 360) % 360;
 }
 
 function calculateSunPath(lat){
-  const northernHemisphere = lat >= 0;
-  let sunriseAzimuth;
-  let solarNoonAzimuth;
-  let sunsetAzimuth;
+const northernHemisphere = lat >= 0;
 
-  if(northernHemisphere){
-    sunriseAzimuth = 90;
-    solarNoonAzimuth = 180;
-    sunsetAzimuth = 270;
-  } else {
-    sunriseAzimuth = 90;
-    solarNoonAzimuth = 0;
-    sunsetAzimuth = 270;
-  }
+let sunriseAzimuth;
+let solarNoonAzimuth;
+let sunsetAzimuth;
 
-  return {
-    sunrise: normalizeDegrees(sunriseAzimuth),
-    noon: normalizeDegrees(solarNoonAzimuth),
-    sunset: normalizeDegrees(sunsetAzimuth)
-  };
+if(northernHemisphere){
+sunriseAzimuth = 90;
+solarNoonAzimuth = 180;
+sunsetAzimuth = 270;
+}else{
+sunriseAzimuth = 90;
+solarNoonAzimuth = 0;
+sunsetAzimuth = 270;
+}
+
+return {
+sunrise: normalizeDegrees(sunriseAzimuth),
+noon: normalizeDegrees(solarNoonAzimuth),
+sunset: normalizeDegrees(sunsetAzimuth)
+};
 }
 
 function useZipCode(){
-  const zip = document.getElementById("zipcode").value.trim();
-  const result = document.getElementById("result");
 
-  if(!zip){
-    result.style.display = "block";
-    result.innerHTML = "<strong>Please enter a ZIP code.</strong>";
-    return;
-  }
+const zip = document.getElementById("zipcode").value.trim();
+const result = document.getElementById("result");
 
-  if(!zipDatabase[zip]){
-    result.style.display = "block";
-    result.innerHTML = "<strong>ZIP code not found in this starter version.</strong><div>Please enter latitude and longitude manually.</div>";
-    return;
-  }
+if(!zip){
+result.style.display="block";
+result.innerHTML="<strong>Please enter a ZIP code.</strong>";
+return;
+}
 
-  const location = zipDatabase[zip];
-  document.getElementById("lat").value = location.lat;
-  document.getElementById("lon").value = location.lon;
+if(!zipDatabase[zip]){
+result.style.display="block";
+result.innerHTML="<strong>ZIP code not found in this Colorado starter set.</strong><div>Please enter latitude and longitude manually.</div>";
+return;
+}
 
-  calc(location.label);
+const location = zipDatabase[zip];
+document.getElementById("lat").value = location.lat;
+document.getElementById("lon").value = location.lon;
+
+calc(location.label);
 }
 
 function calc(zipLabel = ""){
-  let lat = parseFloat(document.getElementById("lat").value);
-  let lon = parseFloat(document.getElementById("lon").value);
-  let zipInput = document.getElementById("zipcode").value.trim();
 
-  let result = document.getElementById("result");
+let lat=parseFloat(document.getElementById("lat").value);
+let lon=parseFloat(document.getElementById("lon").value);
+let zipInput=document.getElementById("zipcode").value.trim();
 
-  if(isNaN(lat)){
-    result.style.display = "block";
-    result.innerHTML = "<strong>Please enter a valid latitude.</strong>";
-    return;
-  }
+let result=document.getElementById("result");
 
-  let fixedTilt = Math.round(Math.abs(lat) * 0.76 + 3.1);
-  let summerTilt = Math.round(Math.abs(lat) * 0.9 - 23.5);
-  let winterTilt = Math.round(Math.abs(lat) * 0.9 + 29);
+if(isNaN(lat)){
+result.style.display="block";
+result.innerHTML="<strong>Please enter a valid latitude.</strong>";
+return;
+}
 
-  if(summerTilt < 0){
-    summerTilt = 0;
-  }
+let fixedTilt=Math.round(Math.abs(lat)*0.76+3.1);
+let summerTilt=Math.round(Math.abs(lat)*0.9-23.5);
+let winterTilt=Math.round(Math.abs(lat)*0.9+29);
 
-  let azimuth = (lat >= 0) ? 180 : 0;
-  let direction = (lat >= 0) ? "True South" : "True North";
+if(summerTilt < 0){
+summerTilt = 0;
+}
 
-  const sunPath = calculateSunPath(lat);
+let azimuth=(lat>=0)?180:0;
+let direction=(lat>=0)?"True South":"True North";
 
-  let locationLine = "";
-  if(zipLabel){
-    locationLine = "<div><b>ZIP Match:</b> " + zipLabel + "</div>";
-  } else if(zipInput){
-    locationLine = "<div><b>ZIP Entered:</b> " + zipInput + "</div>";
-  }
+const sunPath = calculateSunPath(lat);
 
-  result.style.display = "block";
-  result.innerHTML =
-    "<strong>Recommended Fixed Tilt: " + fixedTilt + "°</strong>" +
-    "<div><b>Recommended Summer Tilt:</b> " + summerTilt + "°</div>" +
-    "<div><b>Recommended Winter Tilt:</b> " + winterTilt + "°</div>" +
-    "<br>" +
-    locationLine +
-    "<div><b>Suggested Panel Direction:</b> " + direction + " (" + azimuth + "°)</div>" +
-    "<div><b>Latitude:</b> " + lat + "°</div>" +
-    "<div><b>Longitude:</b> " + (isNaN(lon) ? "Not provided" : lon + "°") + "</div>" +
-    "<br>" +
-    "<div><b>Sunrise Direction:</b> " + sunPath.sunrise + "°</div>" +
-    "<div><b>Solar Noon Direction:</b> " + sunPath.noon + "°</div>" +
-    "<div><b>Sunset Direction:</b> " + sunPath.sunset + "°</div>" +
-    "<br>" +
-    "<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
+let locationLine = "";
+if(zipLabel){
+locationLine = "<div><b>ZIP Match:</b> " + zipLabel + "</div>";
+}else if(zipInput){
+locationLine = "<div><b>ZIP Entered:</b> " + zipInput + "</div>";
+}
+
+result.style.display="block";
+result.innerHTML=
+"<strong>Recommended Fixed Tilt: "+fixedTilt+"°</strong>"+
+"<div><b>Recommended Summer Tilt:</b> "+summerTilt+"°</div>"+
+"<div><b>Recommended Winter Tilt:</b> "+winterTilt+"°</div>"+
+"<br>"+
+locationLine+
+"<div><b>Suggested Panel Direction:</b> "+direction+" ("+azimuth+"°)</div>"+
+"<div><b>Latitude:</b> "+lat+"°</div>"+
+"<div><b>Longitude:</b> "+(isNaN(lon) ? "Not provided" : lon+"°")+"</div>"+
+"<br>"+
+"<div><b>Sunrise Direction:</b> "+sunPath.sunrise+"°</div>"+
+"<div><b>Solar Noon Direction:</b> "+sunPath.noon+"°</div>"+
+"<div><b>Sunset Direction:</b> "+sunPath.sunset+"°</div>"+
+"<br>"+
+"<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
+
 }
 
 function useMyLocation(){
-  let result = document.getElementById("result");
 
-  if(!navigator.geolocation){
-    result.style.display = "block";
-    result.innerHTML = "<strong>Geolocation is not supported on this device.</strong>";
-    return;
-  }
+let result=document.getElementById("result");
 
-  result.style.display = "block";
-  result.innerHTML = "<strong>Getting your location...</strong>";
+if(!navigator.geolocation){
+result.style.display="block";
+result.innerHTML="<strong>Geolocation is not supported on this device.</strong>";
+return;
+}
 
-  navigator.geolocation.getCurrentPosition(
-    function(position){
-      let lat = position.coords.latitude.toFixed(3);
-      let lon = position.coords.longitude.toFixed(3);
+result.style.display="block";
+result.innerHTML="<strong>Getting your location...</strong>";
 
-      document.getElementById("lat").value = lat;
-      document.getElementById("lon").value = lon;
+navigator.geolocation.getCurrentPosition(
 
-      calc();
-    },
-    function(){
-      result.innerHTML = "<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
-    }
-  );
+function(position){
+let lat=position.coords.latitude.toFixed(3);
+let lon=position.coords.longitude.toFixed(3);
+
+document.getElementById("lat").value=lat;
+document.getElementById("lon").value=lon;
+
+calc();
+},
+
+function(){
+result.innerHTML="<strong>Location access denied.</strong><div>Please enter coordinates manually.</div>";
+}
+
+);
+
 }
 
 function updateConnectionStatus(){
-  const status = document.getElementById("connectionStatus");
-  const note = document.getElementById("offlineNote");
+const status = document.getElementById("connectionStatus");
+const note = document.getElementById("offlineNote");
 
-  if(navigator.onLine){
-    status.textContent = "Online";
-    note.style.display = "none";
-  } else {
-    status.textContent = "Offline mode active";
-    note.style.display = "block";
-  }
+if(navigator.onLine){
+status.textContent = "Online";
+note.style.display = "none";
+}else{
+status.textContent = "Offline mode active";
+note.style.display = "block";
+}
 }
 
 window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 updateConnectionStatus();
+
 </script>
 
 <script>
