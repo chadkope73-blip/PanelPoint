@@ -194,7 +194,7 @@ text-decoration:underline;
 
 <div class="container">
 
-<img src="logo.png" class="logo" alt="In Tandem Toolworks logo">
+<img src="logo.png" class="logo">
 
 <h1>Solar Panel Tilt & Direction Calculator</h1>
 
@@ -241,10 +241,6 @@ Solar Production Calculator
 Off-Grid Solar System Size Calculator
 </a>
 
-<a class="tool-btn" href="https://truenorth.ittworks.com">
-True North Field Tool
-</a>
-
 </div>
 
 <div class="donate">
@@ -253,7 +249,7 @@ True North Field Tool
 
 <a class="donate-btn" href="https://donate.stripe.com/4gM3cv0kV4UJbzPfeDeAg00" target="_blank">
 
-<img src="ittw-donate.png" alt="Donation icon">
+<img src="ittw-donate.png">
 
 Support InTandem Toolworks
 
@@ -282,3 +278,51 @@ Follow us on Facebook
 </div>
 
 </div>
+
+<script>
+
+const magneticDeclination = 7.6;
+
+function calc(){
+
+let lat=parseFloat(document.getElementById("lat").value);
+let lon=parseFloat(document.getElementById("lon").value);
+
+let result=document.getElementById("result");
+
+if(isNaN(lat)){
+result.style.display="block";
+result.innerHTML="<strong>Please enter a valid latitude.</strong>";
+return;
+}
+
+let fixedTilt=Math.round(Math.abs(lat)*0.76+3.1);
+let summerTilt=Math.round(Math.abs(lat)*0.9-23.5);
+let winterTilt=Math.round(Math.abs(lat)*0.9+29);
+
+if(summerTilt < 0){summerTilt = 0;}
+
+let azimuth=(lat>=0)?180:0;
+let direction=(lat>=0)?"True South":"True North";
+
+result.style.display="block";
+result.innerHTML=
+"<strong>Recommended Fixed Tilt: "+fixedTilt+"°</strong>"+
+"<div><b>Recommended Summer Tilt:</b> "+summerTilt+"°</div>"+
+"<div><b>Recommended Winter Tilt:</b> "+winterTilt+"°</div>"+
+"<br>"+
+"<div><b>Suggested Panel Direction:</b> "+direction+" ("+azimuth+"°)</div>"+
+"<div><b>Latitude:</b> "+lat+"°</div>"+
+"<div><b>Longitude:</b> "+(isNaN(lon) ? "Not provided" : lon+"°")+"</div>"+
+"<br>"+
+"<div><b>Magnetic Declination:</b> "+magneticDeclination+"° East</div>"+
+"<div><b>Compass Correction:</b> Subtract "+magneticDeclination+"° from compass heading to find True North.</div>"+
+"<br>"+
+"<div><b>Tip:</b> Use this as a practical starting point and adjust for roof angle, shading, and seasonal goals.</div>";
+
+}
+
+</script>
+
+</body>
+</html>
