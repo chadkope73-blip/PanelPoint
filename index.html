@@ -39,7 +39,7 @@ box-sizing:border-box;
 body{
 font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 background:
-linear-gradient(rgba(11,18,32,.82),rgba(11,18,32,.88)),
+linear-gradient(rgba(11,18,32,.45),rgba(11,18,32,.55)),
 url("/topo-bg.jpg");
 background-size:cover;
 background-position:center;
@@ -115,6 +115,7 @@ border-radius:14px;
 border:none;
 font-size:16px;
 box-sizing:border-box;
+transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
 }
 
 input{
@@ -133,6 +134,7 @@ box-shadow:0 10px 24px rgba(103,184,246,.22);
 
 button:hover{
 filter:brightness(1.05);
+transform:scale(1.01);
 }
 
 .secondary{
@@ -187,26 +189,6 @@ display:block;
 margin-bottom:8px;
 font-size:18px;
 color:var(--accent2);
-}
-
-.tools{
-margin-top:35px;
-}
-
-.tool-btn{
-display:block;
-margin:8px auto;
-padding:12px;
-background:var(--panel);
-border:1px solid var(--line);
-border-radius:14px;
-color:var(--text);
-text-decoration:none;
-font-weight:bold;
-}
-
-.tool-btn:hover{
-background:#142033;
 }
 
 .donate{
@@ -313,20 +295,6 @@ Longitude is optional. West of Greenwich is negative. Example: Colorado is about
 <button class="secondary" onclick="useMyLocation()">Use My Location</button>
 
 <div id="result" class="result"></div>
-
-<div class="tools">
-
-<h3>More Solar Tools</h3>
-
-<a class="tool-btn" href="https://solarproduction.ittworks.com">
-Solar Production Calculator
-</a>
-
-<a class="tool-btn" href="https://offgridsolar.ittworks.com">
-Off-Grid Solar System Size Calculator
-</a>
-
-</div>
 
 <div class="donate">
 
